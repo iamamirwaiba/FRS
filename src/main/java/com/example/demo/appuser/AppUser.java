@@ -17,6 +17,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@Table
 public class AppUser implements UserDetails {
 
 
@@ -24,11 +25,16 @@ public class AppUser implements UserDetails {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
+    @Column(name="user_id")
     private Long id;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String phoneNumber;
     private String email;
+    @Column(nullable = false)
     private String password;
     private String DOB;
     @Enumerated(EnumType.STRING)
