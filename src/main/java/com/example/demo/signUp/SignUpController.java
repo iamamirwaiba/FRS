@@ -17,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "api/v1/public")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class SignUpController {
 
     private final SignUpService signUpService;
@@ -24,9 +25,7 @@ public class SignUpController {
     @PostMapping("/signUp")
     public ResponseEntity<Map<String,String>> register(@RequestBody SignUpRequest request) {
 
-        Map<String,String> frs=new HashMap<>();
-
-        frs=signUpService.register(request);
+        Map<String,String> frs=signUpService.register(request);
         return new ResponseEntity<>(frs, HttpStatus.OK);
     }
 

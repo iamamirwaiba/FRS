@@ -16,4 +16,5 @@ public class SignUpRequest {
     private final String phoneNumber;
     private final String DOB;
     private final String password;
+    // private final String
 }

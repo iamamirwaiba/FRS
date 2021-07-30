@@ -1,9 +1,7 @@
 package com.example.demo.appuser;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.demo.appuser.AppUserRole;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +16,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @Entity
 @Table
+@ToString
 public class AppUser implements UserDetails {
 
 
@@ -37,6 +36,10 @@ public class AppUser implements UserDetails {
     @Column(nullable = false)
     private String password;
     private String DOB;
+    @Column(name="user_image")
+    private String userImage;
+    private String longitude;
+    private String latitude;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     private Boolean locked = false;

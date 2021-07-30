@@ -1,14 +1,9 @@
 package com.example.demo.appuser;
 
 import com.example.demo.Constants;
-import com.example.demo.signUp.SignUpRequest;
-import com.example.demo.signin.SignInController;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -50,9 +45,13 @@ public class AppUserService implements UserDetailsService {
                 .findByPhoneNumber(appUser.getPhoneNumber())
                 .isPresent();
 
-        if (!userExist) {
+        if (userExist) {
 
-            throw new IllegalStateException("PhoneNumber already registered");
+            Map<String,String> frs=new HashMap<>();
+            frs.put("message","Already Registered");
+            return frs;
+
+           // throw new IllegalStateException("PhoneNumber already registered");
         }
 
         String encodedPassword = bCryptPasswordEncoder
@@ -60,30 +59,16 @@ public class AppUserService implements UserDetailsService {
 
         appUser.setPassword(encodedPassword);
 
-        Map<String,String> frs=generateJWTToken(appUser);
+        //Map<String,String> frs=generateJWTToken(appUser);
+        Map<String,String>frs=new HashMap<>();
+        frs.put("message","Registration Successful");
 
         appUserRepository.save(appUser);
 
         return frs;
     }
 
-    public Map<String,String> generateJWTToken(AppUser appUser){
-        long timeStamp=System.currentTimeMillis();
-        String token= Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY).
-                setIssuedAt(new Date(timeStamp))
-                .setExpiration(new Date(timeStamp+Constants.TOKEN_VALIDITY))
-                .claim("firstName",appUser.getFirstName())
-                .claim("lastName",appUser.getLastName())
-                .claim("phoneNumber",appUser.getPhoneNumber())
-                .claim("email",appUser.getEmail())
-                .claim("DOB",appUser.getDOB())
-                .compact();
 
-        Map<String,String> frs=new HashMap<>();
-        frs.put("Token",token);
-        return frs;
-
-    }
 
 
 }
