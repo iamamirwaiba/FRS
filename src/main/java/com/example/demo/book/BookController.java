@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/public")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class BookController {
@@ -50,6 +50,13 @@ public class BookController {
         Long user_id=Long.parseLong(id);
        return bookService.bookbyuser(user_id);
 
+    }
+    @PostMapping("/cancleBook")
+    public Map<String, String> cancleBook(@RequestBody Map<String,Object> request){
+        String Id=(String) request.get("bookId");
+        Long bookId=Long.parseLong(Id);
+        Map<String,String> message=bookService.cancelBooking(bookId);
+        return message;
     }
 
 }

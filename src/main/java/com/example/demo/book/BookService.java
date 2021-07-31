@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface BookService {
     public Map<String,String> makeBooking(BookRequest request);
-    public Map<String,String> cancleBooking(Long id);
+    public Map<String,String> cancelBooking(Long id);
     public List<Book> listAllBooking();
     public List<Book> bookingonfutsal(Long id);
     public List<Book> bookingonground(Long id);

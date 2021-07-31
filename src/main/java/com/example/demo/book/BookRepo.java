@@ -21,4 +21,7 @@ public interface BookRepo extends JpaRepository<Book,Long> {
     @Query(value="select c from Book c where c.user_id=?1")
     public List<Book> findbyuser(Long user_id);
 
+    @Query(value="select c from Book c where c.id=?1")
+    public Book findbyId(Long book_id);
+
 }
