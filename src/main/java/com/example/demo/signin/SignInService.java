@@ -45,6 +45,10 @@ public class SignInService  {
         frs.put("first_name",appUser.getFirstName());
         frs.put("last_name",appUser.getLastName());
         frs.put("user_image",appUser.getUserImage());
+        if(appUser.getLocked()){
+            throw new Exception("account Locked Contact customer care");
+        }
+
 
 
 
