@@ -31,6 +31,8 @@ public class Book {
     private String bookedDate;
     @Column(name="booked_time")
     private String bookedTime;
+    @Column(name="rating_enabled")
+    private int ratingEnabled;
 
     public Book( Long ground_id, Long user_id, String bookedDate,String bookedTime) {
         this.ground_id = ground_id;
@@ -40,5 +42,6 @@ public class Book {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         this.LocalDateTime= formatter.format(date);
+        this.ratingEnabled=0;
     }
 }

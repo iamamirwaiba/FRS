@@ -42,8 +42,10 @@ public class AppUser implements UserDetails {
     private String latitude;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private Boolean locked = false;
+    private Boolean locked;
     private Boolean enabled = true;
+    @Column(name="bookcancledtimes",nullable = true)
+    private int bookcancled;
 
     public AppUser(String firstName,
                    String lastName,
@@ -51,7 +53,7 @@ public class AppUser implements UserDetails {
                    String phoneNumber,
                    String DOB,
                    String password,
-                   AppUserRole appUserRole) {
+                   AppUserRole appUserRole,Boolean locked,int bookcancled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -59,6 +61,8 @@ public class AppUser implements UserDetails {
         this.DOB=DOB;
         this.password = password;
         this.appUserRole = appUserRole;
+        this.locked=locked;
+        this.bookcancled=bookcancled;
     }
 
     @Override

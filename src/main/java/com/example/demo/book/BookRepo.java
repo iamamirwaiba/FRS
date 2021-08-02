@@ -16,7 +16,7 @@ public interface BookRepo extends JpaRepository<Book,Long> {
     public Book booknotAvailable(@Param("bookDate") String bookedDate, @Param("bookedTime") String bookedTime);
 
     @Query(value = "select c from Book c where c.ground_id=?1")
-    public List<Book> findbyground( Long ground_id);
+    public List<Book> findbyground(Long ground_id);
 
     @Query(value="select c from Book c where c.user_id=?1")
     public List<Book> findbyuser(Long user_id);

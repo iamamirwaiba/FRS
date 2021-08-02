@@ -30,7 +30,7 @@ public class SignUpService {
                         request.getPhoneNumber(),
                         request.getDOB(),
                         request.getPassword(),
-                        AppUserRole.USER
+                        AppUserRole.USER,false,0
 
                 )
         );

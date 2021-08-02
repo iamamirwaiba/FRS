@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
             }
 
             String text="Booking for "+request.getBookedDate()+"  "+bookedtimestart+":00 to "+bookedtimeend+":00 is Successful, Thank You";
-            mailService.sendSimpleMessage(to,subject,text);
+            // mailService.sendSimpleMessage(to,subject,text);
             return frs;
         }
         else{
@@ -109,14 +109,30 @@ public class BookServiceImpl implements BookService {
                 }
 
                 String text = "Booking for " + bookedDate + "  " + bookedtimestart + ":00 to " + bookedtimeend + ":00 is Open for Booking at " + futsalName;
-                mailService.sendSimpleMessage(to,Subject,text);
+               // mailService.sendSimpleMessage(to,Subject,text);
 
 
             }
         }
 
+        Long userId=book.getUser_id();
+        Optional<AppUser> appUser=appUserRepository.findById(userId);
+        int bookcancled=appUser.get().getBookcancled();
+
+        bookcancled++;
+        if(bookcancled==5){
+            appUser.get().setLocked(true);
+            appUser.get().setBookcancled(0);
+            bookRepo.deleteById(id);
+            Map<String,String> frs=new HashMap<>();
+            frs.put("message","Account locked due to repeated cancellation, contact the cutomer care support");
+
+            return frs;
+        }
+        appUser.get().setBookcancled(bookcancled);
         Map<String,String> frs=new HashMap<>();
         frs.put("message","Booking Cancel Successful");
+        frs.put("cancel message","Canceling booking many times lead to account lock Be sure to Cancel wisely");
         bookRepo.deleteById(id);
 
         return frs;
@@ -157,6 +173,70 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> bookbyuser(Long id) {
-        return bookRepo.findbyuser(id);
+
+        List<Book> bookList= bookRepo.findbyuser(id);
+        for(int i=0;i<bookList.size();i++){
+            Book book=bookList.get(i);
+            String bookedTime=book.getBookedTime();
+            Long Time=Long.parseLong(bookedTime);
+            Time++;
+            String bookedDate=book.getBookedDate();
+            String bookedday=bookedDate.substring(0,2);
+            Long day=Long.parseLong(bookedday);
+            String bookedmonth=bookedDate.substring(3,5);
+            Long month=Long.parseLong(bookedmonth);
+            String bookedyear=bookedDate.substring(6,10);
+            Long year=Long.parseLong(bookedyear);
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+            String localDateTime= formatter.format(date);
+            String localDate=localDateTime.substring(0,10);
+
+            String day1=localDate.substring(0,2);
+            Long localDay=Long.parseLong(day1);
+            String month1=localDate.substring(3,5);
+            Long localMonth=Long.parseLong(month1);
+            String year1=localDate.substring(6,10);
+            Long localYear=Long.parseLong(year1);
+            String Time1=localDateTime.substring(11,13);
+            Long localTime=Long.parseLong(Time1);
+
+            Boolean isAfter=isBefore(day,month,year,localDay,localMonth,localYear);
+
+            if(isAfter){
+
+                    book.setRatingEnabled(1);
+            }
+            else if(!isAfter){
+                if(bookedDate.equals(localDate)){
+                    if(localTime-Time>=0){
+                        book.setRatingEnabled(1);
+                    }
+                }
+            }
+            else
+                book.setRatingEnabled(0);
+
+        }
+        bookRepo.saveAll(bookList);
+        return bookList;
+    }
+
+    private Boolean isBefore(Long day,Long month,Long year,Long localDay,Long localMonth,Long localYear){
+        System.out.println(day+""+month+""+year);
+        System.out.println(localDay+""+localMonth+""+localYear);
+        if(localYear-year>0){
+            System.out.println(localYear-year);
+            return true;
+        }
+        if(localYear==year&&localMonth-month>0){
+            System.out.println(localMonth-month);
+            return true;
+        }
+        if(localYear==year&&localMonth==month&&localDay-day>0){
+            System.out.println(localDay-day);
+            return true;
+        }
+        return false;
     }
 }

@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -38,16 +36,47 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public double averageRating(Long ground_id) {
-       List<Book> book= bookRepo.findbyground(ground_id);
-       Double average;
-       int temp=0;
-       for(int i=0;i<book.size();i++){
-          Rate rate= rateRepo.getRating(book.get(i).getId());
-          temp+=rate.getRatingValue();
-       }
-       average=(double) temp/book.size();
-       return average;
+    public List<Rate> getFutsalRating(Long futsalId) {
+        List<Ground> ground=groundRepo.findbyFutsal(futsalId);
+        List<Rate> rate1=new LinkedList<>();
+        for (int i=0;i<ground.size();i++) {
+            Ground ground1=ground.get(i);
+            Long groundId=ground1.getGround_id();
+            List<Book> book=bookRepo.findbyground(groundId);
+            for(int j=0;j<book.size();j++){
+                Long bookId=book.get(j).getId();
+                Rate rate=rateRepo.getRating(bookId);
+                rate1.add(rate);
+            }
+
+        }
+        return rate1;
+    }
+
+    @Override
+    public double averageRating(Long id) {
+        List<Ground> ground=groundRepo.findbyFutsal(id);
+        Double value=0.0;
+        Double totalrating=0.0;
+        for(int i=0;i<ground.size();i++){
+            Long groundId=ground.get(i).getGround_id();
+            List <Book> book=bookRepo.findbyground(groundId);
+            for(int j=0;j<book.size();j++){
+                Long bookId=book.get(j).getId();
+                Rate rate=rateRepo.getRating(bookId);
+                int temp=rate.getRatingValue();
+                System.out.println(temp);
+                Double temp1=(double) temp;
+                value+=temp1;
+                totalrating++;
+
+
+
+            }
+        }
+        Double average=value/totalrating;
+        return average;
+
     }
 
 
