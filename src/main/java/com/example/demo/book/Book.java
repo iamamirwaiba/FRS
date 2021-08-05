@@ -39,7 +39,7 @@ public class Book {
         this.user_id = user_id;
         this.bookedDate = bookedDate;
         this.bookedTime=bookedTime;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         this.LocalDateTime= formatter.format(date);
         this.ratingEnabled=0;

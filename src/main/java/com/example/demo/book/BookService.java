@@ -9,5 +9,5 @@ public interface BookService {
     public List<Book> listAllBooking();
     public List<Book> bookingonfutsal(Long id);
     public List<Book> bookingonground(Long id);
-    public List<Book> bookbyuser(Long id);
+    public List<BookResponseBody> bookbyuser(Long id);
 }

@@ -38,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/api/v*/public/**")
                     .permitAll()
+                //.antMatchers("api/v*/admin/**")
+                //.hasAuthority("FUTSALOWNER")
                 .anyRequest()
                 .authenticated().and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

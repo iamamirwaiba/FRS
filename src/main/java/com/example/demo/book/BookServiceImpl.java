@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
             }
 
             String text="Booking for "+request.getBookedDate()+"  "+bookedtimestart+":00 to "+bookedtimeend+":00 is Successful, Thank You";
-            // mailService.sendSimpleMessage(to,subject,text);
+            //  mailService.sendSimpleMessage(to,subject,text);
             return frs;
         }
         else{
@@ -73,7 +73,7 @@ public class BookServiceImpl implements BookService {
         String bookedTime=book.getBookedTime();
         Long time=Long.parseLong(bookedTime);
         List<CancledBook> cancledBook=cancledBookRepo.findbyDateTime(bookedDate,bookedTime);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String localDateTime= formatter.format(date);
         String localDate=localDateTime.substring(0,10);
@@ -172,29 +172,35 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> bookbyuser(Long id) {
+    public List<BookResponseBody> bookbyuser(Long id) {
 
         List<Book> bookList= bookRepo.findbyuser(id);
+        List<BookResponseBody> frs=new LinkedList<>();
         for(int i=0;i<bookList.size();i++){
             Book book=bookList.get(i);
+            Long ground_id=book.getGround_id();
+            Optional<Ground> ground=groundRepo.findById(ground_id);
+            Long futsal_id=ground.get().getFutsal_id();
+            Futsal futsal=futsalRepo.getById(futsal_id);
+            String name=futsal.getName();
             String bookedTime=book.getBookedTime();
             Long Time=Long.parseLong(bookedTime);
             Time++;
             String bookedDate=book.getBookedDate();
-            String bookedday=bookedDate.substring(0,2);
+            String bookedday=bookedDate.substring(3,5);
             Long day=Long.parseLong(bookedday);
-            String bookedmonth=bookedDate.substring(3,5);
+            String bookedmonth=bookedDate.substring(0,2);
             Long month=Long.parseLong(bookedmonth);
             String bookedyear=bookedDate.substring(6,10);
             Long year=Long.parseLong(bookedyear);
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             Date date = new Date();
             String localDateTime= formatter.format(date);
             String localDate=localDateTime.substring(0,10);
 
-            String day1=localDate.substring(0,2);
+            String day1=localDate.substring(3,5);
             Long localDay=Long.parseLong(day1);
-            String month1=localDate.substring(3,5);
+            String month1=localDate.substring(0,2);
             Long localMonth=Long.parseLong(month1);
             String year1=localDate.substring(6,10);
             Long localYear=Long.parseLong(year1);
@@ -214,17 +220,29 @@ public class BookServiceImpl implements BookService {
                     }
                 }
             }
-            else
+            else {
                 book.setRatingEnabled(0);
+            }
+            BookResponseBody bookResponseBody=new BookResponseBody(book.getId(),book.getGround_id(),book.getUser_id(),book.getLocalDateTime(),book.getBookedDate(),book.getBookedTime(),book.getRatingEnabled(),name);
+
+            frs.add(bookResponseBody);
 
         }
         bookRepo.saveAll(bookList);
-        return bookList;
+        return frs;
     }
 
     private Boolean isBefore(Long day,Long month,Long year,Long localDay,Long localMonth,Long localYear){
+
+        System.out.println(
+        );
+        System.out.println();
+        System.out.println();
         System.out.println(day+""+month+""+year);
         System.out.println(localDay+""+localMonth+""+localYear);
+        System.out.println();
+        System.out.println();
+        System.out.println();
         if(localYear-year>0){
             System.out.println(localYear-year);
             return true;

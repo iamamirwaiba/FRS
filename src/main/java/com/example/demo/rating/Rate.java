@@ -31,7 +31,7 @@ public class Rate {
     public Rate(int ratingValue, Long bookId) {
         this.ratingValue = ratingValue;
         this.bookId = bookId;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         this.ratedDate=formatter.format(date);
     }

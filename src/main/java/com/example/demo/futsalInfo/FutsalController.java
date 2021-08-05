@@ -78,6 +78,13 @@ public class FutsalController {
 
     }
 
+    @PostMapping("/findbyground")
+    public Futsal findbyground(@RequestBody Map<String,String> request){
+        Long futsal_id=Long.parseLong((String) request.get("futsal_id"));
+        Optional<Futsal> futsal=futsalRepo.findById(futsal_id);
+        return futsal.get();
+    }
+
 
 
 }

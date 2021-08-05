@@ -36,7 +36,7 @@ public class CancledBook {
         this.groundId = groundId;
         this.bookedDate = bookedDate;
         this.bookedTime = bookedTime;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         this.localDateTime= formatter.format(date);
     }

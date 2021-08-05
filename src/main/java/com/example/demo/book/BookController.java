@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,11 @@ public class BookController {
 
     @PostMapping("/book")
     public ResponseEntity<Map<String,String>> makeBooking (@RequestBody BookRequest request){
+        System.out.println();
+        System.out.println();
+        System.out.println(request.toString());
+        System.out.println();
+        System.out.println();
         Map<String,String> frs=bookService.makeBooking(request);
         return new ResponseEntity<>(frs,HttpStatus.OK);
 
@@ -34,8 +37,7 @@ public class BookController {
     }
     @GetMapping("/findbookbyground")
     public List<Book> findbookingbyground(@RequestBody Map<String,Object> request){
-        String id=(String) request.get("ground_id");
-        Long ground_id=Long.parseLong(id);
+        Long  ground_id=Long.parseLong((String) request.get("ground_id"));
         System.out.println(ground_id);
         return bookService.bookingonground(ground_id);
     }
@@ -45,9 +47,14 @@ public class BookController {
         return bookService.listAllBooking();
     }
 
-    @GetMapping("/findbookbyuser")
-    public List<Book> bookbyuser(@RequestBody Map<String,Object> request){
+    @RequestMapping("/findbookbyuser")
+    public List<BookResponseBody> bookbyuser(@RequestBody Map<String,Object> request){
         String id=(String) request.get("user_id");
+        System.out.println();
+        System.out.println();
+        System.out.println(id);
+        System.out.println();
+        System.out.println();
         Long user_id=Long.parseLong(id);
         return bookService.bookbyuser(user_id);
 
